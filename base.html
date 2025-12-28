@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Library{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* subtle animations */
+      .fade-in { animation: fadeIn 0.6s ease-in-out; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
+      .pulse { animation: pulse 2s infinite; }
+      @keyframes pulse { 0% { transform: scale(1);} 50% { transform: scale(1.02);} 100% { transform: scale(1);} }
+      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); transition: all .2s ease; }
+      .small-muted { font-size: .9rem; color: #666; }
+      body { padding-top: 70px; }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">My Library</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/student">Student</a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            {% if session.student_name %}
+              <li class="nav-item"><a class="nav-link" href="/student">{{ session.student_name }}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/student/logout">Logout</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="/student/login">Student Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container fade-in">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat,msg in messages %}
+            <div class="alert alert-{{ 'success' if cat=='success' else ('danger' if cat=='danger' else 'info') }} mt-2">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

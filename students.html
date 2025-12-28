@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% block title %}Students{% endblock %}{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Students</h2>
+  <div>
+    <a class="btn btn-sm btn-outline-secondary" href="/admin/students">Refresh</a>
+  </div>
+</div>
+<form method="post" action="/admin/students/import" enctype="multipart/form-data" class="mb-3">
+  <input type="file" name="file" accept=".csv" class="form-control w-50 d-inline">
+  <button class="btn btn-sm btn-outline-primary">Import Students CSV</button>
+</form>
+<table class="table">
+<thead><tr><th>Name</th><th>Roll</th><th>Email</th><th></th></tr></thead>
+<tbody>
+{% for s in students %}
+  <tr><td>{{ s.name }}</td><td>{{ s.roll_no or '—' }}</td><td>{{ s.email or '—' }}</td><td></td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% block content %}
+<div class="panel">
+  <h2>Request a Book</h2>
+  <form method="post">
+    <label>Roll<br><input id="roll" name="roll" required></label>
+    <label>Name<br><input id="name" name="name" readonly></label>
+    <label>Select Book<br><select name="book_id">{% for b in books %}<option value='{{b['id']}}'>{{b['title']}} - {{b['author']}}</option>{% endfor %}</select></label>
+    <label>Type<br><select name="type"><option value="issue">Issue</option><option value="return">Return</option></select></label>
+    <button class="btn" type="submit">Send Request</button>
+  </form>
+</div>
+<script>
+document.getElementById('roll').addEventListener('input', async function(){
+  const r=this.value.trim();
+  if(!r){ document.getElementById('name').value=''; return; }
+  const res = await fetch('/api/student?roll='+encodeURIComponent(r));
+  const j = await res.json();
+  document.getElementById('name').value = j.name || '';
+});
+</script>
+{% endblock %}

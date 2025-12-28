@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block title %}Books{% endblock %}{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Books</h2>
+  <div>
+    <a class="btn btn-sm btn-primary" href="/admin/books/add">Add</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/admin/books/export">Export CSV</a>
+  </div>
+</div>
+{% if action=='add' %}
+  <form method="post" class="card p-3">
+    <div class="mb-2"><input name="title" placeholder="Title" class="form-control" required></div>
+    <div class="mb-2"><input name="author" placeholder="Author" class="form-control"></div>
+    <div class="mb-2"><input name="isbn" placeholder="ISBN" class="form-control"></div>
+    <div class="mb-2"><input name="copies" type="number" min="1" value="1" class="form-control"></div>
+    <button class="btn btn-primary">Add Book</button>
+  </form>
+{% else %}
+  <form method="post" action="/admin/books/import" enctype="multipart/form-data" class="mb-3">
+    <input type="file" name="file" accept=".csv" class="form-control w-50 d-inline">
+    <button class="btn btn-sm btn-outline-primary">Import CSV</button>
+  </form>
+  <table class="table table-striped">
+    <thead><tr><th>Title</th><th>Author</th><th>ISBN</th><th>Copies</th><th></th></tr></thead>
+    <tbody>
+    {% for b in books %}
+      <tr><td>{{ b.title }}</td><td>{{ b.author or '—' }}</td><td>{{ b.isbn or '—' }}</td><td>{{ b.copies }}</td>
+      <td><form method="post" action="/admin/books/delete/{{ b.id }}"><button class="btn btn-sm btn-danger">Delete</button></form></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}

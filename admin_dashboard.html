@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block title %}Admin{% endblock %}{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Admin Dashboard</h2>
+  <div><a class="btn btn-sm btn-outline-secondary" href="/admin/books">Manage Books</a> <a class="btn btn-sm btn-outline-secondary" href="/admin/students">Manage Students</a></div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-3"><div class="card p-3"><h5>Books</h5><p>{{ stats.books }}</p></div></div>
+  <div class="col-md-3"><div class="card p-3"><h5>Students</h5><p>{{ stats.students }}</p></div></div>
+  <div class="col-md-3"><div class="card p-3"><h5>Issued</h5><p>{{ stats.issued }}</p></div></div>
+  <div class="col-md-3"><div class="card p-3"><h5>Overdue</h5><p class="text-danger">{{ stats.overdue }}</p></div></div>
+</div>
+<h4>Recent Issues</h4>
+<ul class="list-group">
+{% for i in recent_issues %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <div><strong>{{ i.title }}</strong> — {{ i.name }} ({{ i.roll_no or '—' }}) <div class="small-muted">Due: {{ i.due_date }} — Fine: {{ i.fine }}</div></div>
+    <div>
+      {% if not i.returned_at %}
+        <form method="post" action="/admin/return/{{ i.id }}" style="display:inline"><button class="btn btn-sm btn-success">Return</button></form>
+      {% endif %}
+      {% if i.fine and not i.fine_paid %}
+        <form method="post" action="/admin/mark_fine_paid/{{ i.id }}" style="display:inline"><button class="btn btn-sm btn-warning">Mark Fine Paid</button></form>
+      {% endif %}
+    </div>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

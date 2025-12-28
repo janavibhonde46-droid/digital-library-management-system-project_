@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% block title %}Student Portal{% endblock %}{% block content %}
+<div class="row"><div class="col-md-6">
+  <h3>Student Portal</h3>
+  {% if student %}
+    <div class="card p-3 mb-3">
+      <h5>{{ student.name }} — {{ student.roll_no or '—' }}</h5>
+      <p>Total fine: {{ total_fine }}</p>
+      <ul class="list-group">
+      {% for it in issues %}
+        <li class="list-group-item">{{ it.title }} — due {{ it.due_date }} — fine: {{ it.fine }} — returned: {{ it.returned_at or 'No' }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <form method="post" class="card p-3">
+      <div class="mb-2"><input name="roll_no" placeholder="Roll No" class="form-control" required></div>
+      <button class="btn btn-primary">Lookup</button>
+    </form>
+    <p class="small-muted mt-2">Or <a href="/student/register">register</a> / <a href="/student/login">login</a></p>
+  {% endif %}
+</div></div>
+{% endblock %}
